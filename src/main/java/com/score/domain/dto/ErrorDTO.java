@@ -9,15 +9,8 @@ public class ErrorDTO implements Serializable {
 
   private Integer code;
   private String message;
-  private String field;
 
   public ErrorDTO() {}
-
-  public ErrorDTO(Integer code, String message, String field) {
-    this.code = code;
-    this.message = message;
-    this.field = field;
-  }
 
   public ErrorDTO(Integer code, String message) {
     this.code = code;
@@ -40,40 +33,21 @@ public class ErrorDTO implements Serializable {
     this.message = message;
   }
 
-  public String getField() {
-    return field;
-  }
-
-  public void setField(String field) {
-    this.field = field;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ErrorDTO errorDTO = (ErrorDTO) o;
-    return Objects.equals(code, errorDTO.code)
-        && Objects.equals(message, errorDTO.message)
-        && Objects.equals(field, errorDTO.field);
+    return Objects.equals(code, errorDTO.code) && Objects.equals(message, errorDTO.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, message, field);
+    return Objects.hash(code, message);
   }
 
   @Override
   public String toString() {
-    return "ErrorDTO{"
-        + "code="
-        + code
-        + ", message='"
-        + message
-        + '\''
-        + ", field='"
-        + field
-        + '\''
-        + '}';
+    return "ErrorDTO{" + "code=" + code + ", message='" + message + '\'' + '}';
   }
 }

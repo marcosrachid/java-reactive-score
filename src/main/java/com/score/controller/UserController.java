@@ -8,14 +8,20 @@ import com.score.service.IUserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/**
+ * Web flux controller for non blocking event-driven requests
+ */
 @RestController
 public class UserController {
+
+  private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
   private IUserService userService;
 
@@ -23,6 +29,10 @@ public class UserController {
     this.userService = userService;
   }
 
+  /**
+   * @param scoreRequest
+   * @return
+   */
   @ApiOperation(value = "Operation add points to a specific user")
   @ApiResponses(
       value = {
@@ -43,10 +53,15 @@ public class UserController {
       value = {"/score"},
       method = RequestMethod.POST)
   public ResponseEntity<Void> score(@RequestBody ScoreRequestDTO scoreRequest) {
+    LOG.debug("REST request to score: {}", scoreRequest);
     userService.score(scoreRequest);
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * @param userId
+   * @return
+   */
   @ApiOperation(value = "Operation to get a specific user's position")
   @ApiResponses(
       value = {
@@ -68,11 +83,15 @@ public class UserController {
       method = RequestMethod.GET)
   public ResponseEntity<Mono<PositionResponseDTO>> position(
       @PathVariable("userId") Integer userId) {
-    Mono<PositionResponseDTO> e = userService.position(userId);
-    HttpStatus status = e != null ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-    return ResponseEntity.status(status).body(e);
+    LOG.debug("REST request to get position: {}", userId);
+    return ResponseEntity.ok(userService.position(userId));
   }
 
+  /**
+   * @param page
+   * @param size
+   * @return
+   */
   @ApiOperation(value = "Operation to list in order of position all registered users")
   @ApiResponses(
       value = {
@@ -95,6 +114,7 @@ public class UserController {
   public ResponseEntity<Flux<PositionResponseDTO>> highscorelist(
       @RequestParam(name = "page", defaultValue = "1") Integer page,
       @RequestParam(name = "size", defaultValue = "10") Integer size) {
+    LOG.debug("REST request to list high score: {}, {}", page, size);
     return ResponseEntity.ok(userService.highscorelist(page, size));
   }
 }

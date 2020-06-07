@@ -2,17 +2,20 @@ package com.score.domain.repository;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User implements Serializable, Comparable<User> {
 
   private Integer userId;
-  private Integer score = 0;
+  // AtomicInteger is necessary due to its thread safe characteristics since it could be a scenario
+  // with multiple concurrent requests to the same userId
+  private AtomicInteger score = new AtomicInteger(0);
 
   public User() {}
 
-  public User(Integer userId, Integer score) {
+  public User(Integer userId, Integer points) {
     this.userId = userId;
-    this.score = score;
+    this.score.addAndGet(points);
   }
 
   public Integer getUserId() {
@@ -24,20 +27,20 @@ public class User implements Serializable, Comparable<User> {
   }
 
   public Integer getScore() {
-    return score;
+    return score.get();
   }
 
   public void setScore(Integer score) {
-    this.score = score;
+    this.score = new AtomicInteger(score);
   }
 
   public void addScore(Integer score) {
-    this.score = this.score + score;
+    this.score.addAndGet(score);
   }
 
   @Override
   public int compareTo(User user) {
-    return this.score.compareTo(user.score);
+    return user.getScore().compareTo(this.getScore());
   }
 
   @Override
