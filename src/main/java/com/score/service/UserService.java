@@ -5,6 +5,7 @@ import com.score.domain.dto.request.ScoreRequestDTO;
 import com.score.domain.dto.response.PositionResponseDTO;
 import com.score.domain.repository.User;
 import com.score.repository.UserRepository;
+import com.score.service.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,8 +42,7 @@ public class UserService implements IUserService {
         () -> {
           Optional<User> user = userRepository.getUser(userId);
           if (!user.isPresent()) {
-            // Could be Mono.error with not found
-            return Mono.empty();
+            return Mono.error(new ResourceNotFoundException());
           }
           User u = user.get();
           OptionalInt position = userRepository.getPosition(userId);

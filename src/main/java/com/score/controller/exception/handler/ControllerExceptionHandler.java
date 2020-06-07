@@ -1,6 +1,7 @@
 package com.score.controller.exception.handler;
 
 import com.score.domain.dto.ErrorDTO;
+import com.score.service.exception.ResourceNotFoundException;
 import com.score.utils.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,12 @@ public class ControllerExceptionHandler {
             new ErrorDTO(
                 HttpStatus.BAD_REQUEST.value(),
                 String.format(ex.getMostSpecificCause().getLocalizedMessage())));
+  }
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  ResponseEntity<Object> handlerResourceNotFoundException(ResourceNotFoundException ex) {
+    LOG.debug(WEB_ERROR, ex);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
 
   @ExceptionHandler(Exception.class)

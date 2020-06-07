@@ -2,6 +2,7 @@ package com.score.domain.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.score.utils.Messages;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -11,8 +12,8 @@ import java.util.Objects;
 // some validations
 public class ScoreRequestDTO implements Serializable {
 
-  private final Integer userId;
-  private final Integer points;
+  private Integer userId;
+  private Integer points;
 
   @JsonCreator
   public ScoreRequestDTO(
@@ -20,10 +21,10 @@ public class ScoreRequestDTO implements Serializable {
       @JsonProperty(value = "points") Integer points) {
     this.userId = userId;
     this.points = points;
-    Assert.notNull(this.userId, "userId must not be null");
-    Assert.isTrue(this.userId > 0, "userId must be positive");
-    Assert.notNull(this.points, "points must not be null");
-    Assert.isTrue(this.points> 0, "points must be positive");
+    Assert.notNull(this.userId, Messages.USER_ID_NOT_NULL);
+    Assert.isTrue(this.userId > 0, Messages.USER_ID_POSITIVE);
+    Assert.notNull(this.points, Messages.POINTS_NOT_NULL);
+    Assert.isTrue(this.points > 0, Messages.POINTS_POSITIVE);
   }
 
   public Integer getUserId() {
@@ -50,5 +51,28 @@ public class ScoreRequestDTO implements Serializable {
   @Override
   public String toString() {
     return "ScoreRequestDTO{" + "userId=" + userId + ", points=" + points + '}';
+  }
+
+  public static class ScoreRequestDTOBuilder {
+
+    ScoreRequestDTO scoreRequestDTO = null;
+
+    public ScoreRequestDTOBuilder() {
+      this.scoreRequestDTO = new ScoreRequestDTO(1, 1);
+    }
+
+    public ScoreRequestDTOBuilder withUserId(Integer userId) {
+      this.scoreRequestDTO.userId = userId;
+      return this;
+    }
+
+    public ScoreRequestDTOBuilder withPoints(Integer points) {
+      this.scoreRequestDTO.points = points;
+      return this;
+    }
+
+    public ScoreRequestDTO build() {
+      return scoreRequestDTO;
+    }
   }
 }
