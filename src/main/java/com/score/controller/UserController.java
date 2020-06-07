@@ -1,6 +1,7 @@
 package com.score.controller;
 
 import com.score.domain.dto.ErrorDTO;
+import com.score.domain.dto.request.PaginatorRequestDTO;
 import com.score.domain.dto.request.ScoreRequestDTO;
 import com.score.domain.dto.response.PositionResponseDTO;
 import com.score.domain.dto.swagger.ListPositionResponseSwaggerDTO;
@@ -15,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- * Web flux controller for non blocking event-driven requests
- */
+/** Web flux controller for non blocking event-driven requests */
 @RestController
 public class UserController {
 
@@ -88,8 +87,7 @@ public class UserController {
   }
 
   /**
-   * @param page
-   * @param size
+   * @param paginatorRequestDTO
    * @return
    */
   @ApiOperation(value = "Operation to list in order of position all registered users")
@@ -112,9 +110,8 @@ public class UserController {
       value = {"/highscorelist"},
       method = RequestMethod.GET)
   public ResponseEntity<Flux<PositionResponseDTO>> highscorelist(
-      @RequestParam(name = "page", defaultValue = "1") Integer page,
-      @RequestParam(name = "size", defaultValue = "10") Integer size) {
-    LOG.debug("REST request to list high score: {}, {}", page, size);
-    return ResponseEntity.ok(userService.highscorelist(page, size));
+      PaginatorRequestDTO paginatorRequestDTO) {
+    LOG.debug("REST request to list high score: {}", paginatorRequestDTO);
+    return ResponseEntity.ok(userService.highscorelist(paginatorRequestDTO));
   }
 }

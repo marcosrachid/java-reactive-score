@@ -12,26 +12,26 @@ import java.util.Objects;
 public class ScoreRequestDTO implements Serializable {
 
   private final Integer userId;
-  private final Integer score;
+  private final Integer points;
 
   @JsonCreator
   public ScoreRequestDTO(
       @JsonProperty(value = "userId") Integer userId,
       @JsonProperty(value = "points") Integer points) {
-    Assert.notNull(userId, "userId must not be null");
-    Assert.notNull(points, "points must not be null");
-    Assert.isTrue(userId > 0, "userId must be positive");
-    Assert.isTrue(points > 0, "points must be positive");
     this.userId = userId;
-    this.score = points;
+    this.points = points;
+    Assert.notNull(this.userId, "userId must not be null");
+    Assert.isTrue(this.userId > 0, "userId must be positive");
+    Assert.notNull(this.points, "points must not be null");
+    Assert.isTrue(this.points> 0, "points must be positive");
   }
 
   public Integer getUserId() {
     return userId;
   }
 
-  public Integer getScore() {
-    return score;
+  public Integer getPoints() {
+    return points;
   }
 
   @Override
@@ -39,16 +39,16 @@ public class ScoreRequestDTO implements Serializable {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ScoreRequestDTO that = (ScoreRequestDTO) o;
-    return Objects.equals(userId, that.userId) && Objects.equals(score, that.score);
+    return Objects.equals(userId, that.userId) && Objects.equals(points, that.points);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, score);
+    return Objects.hash(userId, points);
   }
 
   @Override
   public String toString() {
-    return "ScoreRequestDTO{" + "userId=" + userId + ", score=" + score + '}';
+    return "ScoreRequestDTO{" + "userId=" + userId + ", points=" + points + '}';
   }
 }

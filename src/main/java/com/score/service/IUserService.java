@@ -1,5 +1,6 @@
 package com.score.service;
 
+import com.score.domain.dto.request.PaginatorRequestDTO;
 import com.score.domain.dto.request.ScoreRequestDTO;
 import com.score.domain.dto.response.PositionResponseDTO;
 import reactor.core.publisher.Flux;
@@ -11,5 +12,5 @@ public interface IUserService {
 
   Mono<PositionResponseDTO> position(Integer userId);
 
-  Flux<PositionResponseDTO> highscorelist(Integer page, Integer size);
+  Flux<PositionResponseDTO> highscorelist(PaginatorRequestDTO paginatorRequestDTO);
 }

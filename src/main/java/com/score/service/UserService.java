@@ -1,5 +1,6 @@
 package com.score.service;
 
+import com.score.domain.dto.request.PaginatorRequestDTO;
 import com.score.domain.dto.request.ScoreRequestDTO;
 import com.score.domain.dto.response.PositionResponseDTO;
 import com.score.domain.repository.User;
@@ -25,7 +26,8 @@ public class UserService implements IUserService {
   /** @param scoreRequest */
   @Override
   public void score(ScoreRequestDTO scoreRequest) {
-    Mono.fromRunnable(() -> userRepository.score(scoreRequest.getUserId(), scoreRequest.getScore()))
+    Mono.fromRunnable(
+            () -> userRepository.score(scoreRequest.getUserId(), scoreRequest.getPoints()))
         .subscribe();
   }
 
@@ -50,15 +52,15 @@ public class UserService implements IUserService {
   }
 
   /**
-   * @param page
-   * @param size
+   * @param paginatorRequestDTO
    * @return
    */
   @Override
-  public Flux<PositionResponseDTO> highscorelist(Integer page, Integer size) {
+  public Flux<PositionResponseDTO> highscorelist(PaginatorRequestDTO paginatorRequestDTO) {
     return Flux.defer(
         () -> {
-          List<User> users = userRepository.getUsers(page, size);
+          List<User> users =
+              userRepository.getUsers(paginatorRequestDTO.getPage(), paginatorRequestDTO.getSize());
           return Flux.fromStream(
               IntStream.range(0, users.size())
                   .mapToObj(

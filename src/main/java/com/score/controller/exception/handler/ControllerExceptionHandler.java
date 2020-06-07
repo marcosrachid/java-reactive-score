@@ -4,6 +4,8 @@ import com.score.domain.dto.ErrorDTO;
 import com.score.utils.Messages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanInstantiationException;
+import org.springframework.core.NestedRuntimeException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,8 @@ public class ControllerExceptionHandler {
   private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
   private static final String WEB_ERROR = "Web Error: {}";
 
-  @ExceptionHandler(ServerWebInputException.class)
-  ResponseEntity<Object> handleResourceNotFound(ServerWebInputException ex) {
+  @ExceptionHandler({ServerWebInputException.class, BeanInstantiationException.class})
+  ResponseEntity<Object> handleRequestBodyException(NestedRuntimeException ex) {
     LOG.debug(WEB_ERROR, ex);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
         .body(
