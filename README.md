@@ -15,6 +15,7 @@ Maven | 3.10.0-1062.1.1.el7.x86_64
 
 No pre-configuration is necessary
 
+
 ## Building and Testing
 
     $ ./mvnw clean install
@@ -22,3 +23,7 @@ No pre-configuration is necessary
 ## Running
 
     $ ./mvnw spring-boot:run
+
+## Documentaion
+
+After starting the application: <http://localhost:8080/swagger-ui.html>
